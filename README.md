@@ -38,8 +38,6 @@ If you encounter any issues or have suggestions for improvement while using this
 
 ## License
 
-## License
-
 This project is licensed under the Creative Commons Attribution-NoDerivatives (CC BY-ND 4.0) license.
 
 ### Summary:
