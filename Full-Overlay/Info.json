@@ -1,0 +1,41 @@
+{
+  "overview": {
+	"progress": {
+      "total_current": 0,
+      "total_goal": 100
+    }
+    "categories": [
+		"start": "Getting started",
+		"work": [
+			"Programming",
+			"Searching Jobs",
+		],
+		"uni": [
+			"creating flashcards", 
+			"Reading",
+			"Homework",
+			"Review",
+			"Research"
+		],
+		"chores": [
+			"Tidy up",
+			"Various things"
+		]"free_time": [
+			"Programming",
+			"Drawing"
+		]
+	]
+  },
+  "tasks": [
+    {
+      "name" : "",
+	  "category": "",
+      "type": "",
+      "progress": {
+        "current": 0,
+        "goal": 100
+      },
+      "subtasks": []
+    }
+  ]
+}

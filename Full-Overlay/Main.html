@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>task-management full overlay</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Righteous&display=swap">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: transparent; /* camera-space */
+        overflow: hidden;
+		color: #F0F7F4;
+		font-family: 'Righteous';
+		font-size: 4vh;
+    }
+    .background-frame {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+		z-index: -1;
+        background-image: url('../assets/pattern.png');
+        background-repeat: repeat;
+        background-size: 20vh 20vh;
+        clip-path: polygon(95.5% 0%, 95.5% 95.5%, 0% 95.5%, 0% 100%, 100% 100%, 100% 0%); /* cutout to show only the bottom 4.5% */
+    }
+	.time-circle-frame {
+        width: 16.5vh;
+		height: 16.5vh;
+		background-color: #32292F;
+		border-radius: 50%;
+		position: absolute;
+		left: 6vw;
+		top: 96.5vh;
+		transform: translateY(-50%);
+    }
+	.vertical-container {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+		height: 80%;
+		/* font */
+		text-align: center;
+    }
+	.divider {
+		width: 10vh;
+		height: 0.5vh;
+		background: #F0F7F4;
+	}
+	.big-font {
+		font-size: 4vh;
+		margin-top: 0;
+	}
+	.info-tag-container {
+		display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+		width: max-content;
+        height: 20vh;
+		margin-top: 20vh;
+		margin-left: auto;
+		padding-top: 1vh;
+		padding-bottom: 1vh;
+	}
+	.info-tag {
+		width: 100%;
+		position: relative;
+		margin: 0.5vh 0 0.5vh 0;
+	}
+	.info-tag p {
+		white-space: nowrap; /* Prevent line breaks */
+		padding-right: 3vh; /* Add desired right padding */
+	}
+	.tag-box {
+		width: 101%;
+        height: 5vh;
+		z-index: -1;
+        background-color: #32292F;
+        position: absolute;
+        transform: translateX(-1%);
+	}
+	.tag-circle {
+		width: 5vh;
+        height: 5vh;
+		z-index: -1;
+        border-radius: 50%;
+        background-color: #32292F;
+        position: absolute;
+        transform: translateX(-50%);
+	}
+	.tag-text {
+		text-align: center;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+	}
+	hr {
+		border: none;
+		border-top: 0.5vh double #F0F7F4;
+		width: 80%;
+		margin-top: 0;
+		margin-bottom: 0;
+		border-spacing: 0 1vh;
+	}
+	p {
+		margin: 0;
+	}
+	/* hide things if screensize is too little */
+	@media only screen and (max-width: 480px), (max-height: 360px) {
+		.time-circle-frame {
+			display: none;
+		}
+		.info-tag-container {
+			display: none;
+		}
+	}
+</style>
+</head>
+<body>
+<div class="background-frame"></div>
+<div class="time-circle-frame">
+    <div class="vertical-container">
+        <p id="time-now" class="big-font">20:00</p>
+        <hr>
+        <p class="time-font" style="font-size: 2.5vh;">MY TIME</p>
+    </div>
+</div>
+<div class="info-tag-container">
+	<div class="info-tag">
+		<div class="tag-box"></div>
+		<div class="tag-circle"></div>
+		<p id="work-type" style="padding-left:1%">UNI/ WORK</p>
+	</div>
+	<div class="info-tag">
+		<div class="tag-box"></div>
+		<div class="tag-circle"></div>
+		<p id="work-method">PRACTISE</p>
+	</div>
+	<div class="info-tag">
+		<div class="tag-box"></div>
+		<div class="tag-circle"></div>
+		<p id="work-end">bis 22:00</p>
+	</div>
+</div>
+
+
+
+<script>
+    // Update cutout every 30 seconds
+    setInterval(updateCutout, 30000);
+</script>
+</body>
+</html>
