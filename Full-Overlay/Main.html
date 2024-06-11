@@ -135,34 +135,142 @@
 	<div class="info-tag">
 		<div class="tag-box"></div>
 		<div class="tag-circle"></div>
-		<p id="work-type" style="padding-left:1%">UNI/ WORK</p>
+		<p id="category" style="padding-left:2%">CATEGORY</p>
 	</div>
 	<div class="info-tag">
 		<div class="tag-box"></div>
 		<div class="tag-circle"></div>
-		<p id="work-method">PRACTISE</p>
+		<p id="sub_category" style="padding-left:2%">CATEGORY-SUBTYPE</p>
 	</div>
 	<div class="info-tag">
 		<div class="tag-box"></div>
 		<div class="tag-circle"></div>
-		<p id="work-end">bis 22:00</p>
+		<p id="day_deadline" style="padding-left:2%">until XX:XX</p>
 	</div>
 </div>
 
 
 
 <script>
-        function updateTime() {
-            const now = new Date();
-            const timeArray = now.toLocaleTimeString().split(':');
-            document.getElementById('time-now').textContent = timeArray[0] + ":" + timeArray[1];
+    // Global Variables
+    let jsonContent;
+    let activeTaskIndex;
+    let tagsArray = [];
+    let tagsArrayLength = [-1]; // [categories length, sub-categories length]
+    
+    // Fetch JSON data
+    async function getJSON() {
+        try {
+            const response = await fetch('info.json');
+            jsonContent = await response.json();
+        } catch (error) {
+            console.error('Error fetching or parsing JSON:', error);
         }
+        updateVars();
+    }
+    
+    // Update variables after fetching JSON
+    function updateVars(){
+        // Set active task index
+        activeTaskIndex = jsonContent.overview.active_task;
+        
+        // Extract category and sub-category data
+        let tempArray = Object.keys(jsonContent.overview.categories).map(key => {
+            return key.toUpperCase().replace(/_/g, ' ');
+        });
+        tagsArray.push(tempArray);
+        
+        let categoriesKeys = Object.keys(jsonContent.overview.categories);
+        tagsArrayLength = categoriesKeys.map(key => {
+            const subCategoryContent = jsonContent.overview.categories[key];
+            tagsArray.push(subCategoryContent);
+            if(subCategoryContent == null) {
+                return 0;
+            }
+            if(Array.isArray(subCategoryContent)) {
+                return subCategoryContent.length;
+            } else {
+                return 1;
+            }
+        });
+        tagsArrayLength.unshift(categoriesKeys.length);
+    }
+    
+    // Update time
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('time-now').textContent = timeToString(now);
+    }
+    
+    // Update tasks
+    function updateTask() {
+        // Update JSON data
+        getJSON();
+        
+        // Get current task
+        let currentTask = jsonContent.tasks[activeTaskIndex];
+        
+        // Update category display
+        let indexCat = currentTask.category;
+        let catTag = document.getElementById('category');
+        let displaySub;
+        if(indexCat < tagsArrayLength[0] && indexCat>=0) {
+            displaySub = true;
+            catTag.parentElement.style.display = "block";
+            catTag.textContent = tagsArray[0][indexCat];
+        } else {
+            displaySub = false;
+            catTag.parentElement.style.display = "none";
+        }
+        
+        // Update sub-category display
+		let indexSubCat = currentTask.category_subtype;
+        let subCatTag = document.getElementById('sub_category');
+		if(displaySub && indexSubCat < tagsArrayLength[indexCat+1] && indexSubCat>=0) {
+            subCatTag.parentElement.style.display = "block";
+			if(Array.isArray(tagsArray[indexCat+1])){
+				subCatTag.textContent = tagsArray[indexCat+1][indexSubCat];
+			} else {
+				subCatTag.textContent = tagsArray[indexCat+1];
+			}
+        } else {
+            subCatTag.parentElement.style.display = "none";
+        }
+		
+		// Update time until when the user want to end today
+		let endTag = document.getElementById('day_deadline');
+		let dayDeadline = jsonContent.overview.day_deadline;
+		if(dayDeadline[0]<24 && dayDeadline[0]>=0 &&
+				dayDeadline[1]<60 && dayDeadline[1]>=0) {
+            endTag.parentElement.style.display = "block";
+			const deadline = new Date();
+			deadline.setHours(dayDeadline[0]);
+			deadline.setMinutes(dayDeadline[1]);
+			endTag.textContent = "until " + timeToString(deadline);
+		} else {
+			endTag.parentElement.style.display = "none";
+        }
+    }
+	
+	function timeToString(date){
+		if(date.getHours()<0 || date.getHours() >=24 || 
+				date.getMinutes()<0 || date.getMinutes() >=60){
+			return null;
+		}
+		let hours = date.getHours().toString().padStart(2, '0');
+		let min = date.getMinutes().toString().padStart(2, '0');
+		
+		return hours + ":" + min
+	}
 
-        // Update the time immediately when the page loads
-        window.onload = updateTime;
+    // Update elements when page loads
+    window.onload = updateTime;
+    
+    // Update task every minute
+    setInterval(updateTask, 1000);
+    // Update time every 10 seconds
+    setInterval(updateTime, 1000);
+</script>
 
-        // Set an interval to update the time every 10 seconds (10000 milliseconds)
-        setInterval(updateTime, 10000);
-    </script>
 </body>
 </html>

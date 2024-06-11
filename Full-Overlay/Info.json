@@ -4,6 +4,7 @@
 			"total_current": 0,
 			"total_goal": 100
 		},
+		"day_deadline": [0, 0],
 		"categories": {
 			"start": "Getting started",
 			"work": [
@@ -25,15 +26,16 @@
 				"Programming",
 				"Drawing"
 			]
-		}
+		},
+		"active_task": 0
 	},
 	"tasks": [
 		{
-			"name": "",
-			"category": "",
-			"type": "",
+			"name": "Setting up",
+			"category": 0,
+			"category_subtype": 0,
 			"progress": {
-				"current": 0,
+				"current": 60,
 				"goal": 100
 			},
 			"subtasks": []
