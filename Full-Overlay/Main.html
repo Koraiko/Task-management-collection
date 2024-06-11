@@ -152,8 +152,17 @@
 
 
 <script>
-    // Update cutout every 30 seconds
-    setInterval(updateCutout, 30000);
-</script>
+        function updateTime() {
+            const now = new Date();
+            const timeArray = now.toLocaleTimeString().split(':');
+            document.getElementById('time-now').textContent = timeArray[0] + ":" + timeArray[1];
+        }
+
+        // Update the time immediately when the page loads
+        window.onload = updateTime;
+
+        // Set an interval to update the time every 10 seconds (10000 milliseconds)
+        setInterval(updateTime, 10000);
+    </script>
 </body>
 </html>
